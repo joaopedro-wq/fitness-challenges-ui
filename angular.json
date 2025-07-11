@@ -13,17 +13,37 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+            "outputPath": "dist/fitness-challenges-ui",
+            
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
               }
             ],
             "styles": [
-              "src/styles.css"
-            ]
+              "src/styles.less",
+               {
+                "input": "src/styles/default.less",
+                "bundleName": "default",
+                "inject": false
+              },
+              {
+                "input": "src/styles/dark.less",
+                "bundleName": "dark",
+                "inject": false
+              }
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/styles/themes"]
+            }
           },
           "configurations": {
             "production": {
@@ -75,11 +95,14 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+             "src/styles.less"
             ]
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "99f114d0-beca-45cc-9c23-fd40a26ad186"
   }
 }

@@ -1,0 +1,21 @@
+<!--  <nz-switch
+      [ngModel]="themeService.getTheme() === 'dark'"
+      (ngModelChange)="toggleTheme($event)"
+      nzCheckedChildren="🌙"
+      nzUnCheckedChildren="☀️"
+    ></nz-switch> -->
+
+
+<button
+  nz-button
+  nzShape="circle"
+  nzType="default"
+  nzTooltipTitle="Alternar tema"
+  class="theme-toggle-btn"
+  (click)="toggleTheme()"
+>
+  <nz-icon
+    [nzType]="themeService.currentTheme === 'dark' ? 'moon' : 'sun'"
+    nzTheme="outline"
+  ></nz-icon>
+</button>

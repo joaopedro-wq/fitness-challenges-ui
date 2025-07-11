@@ -1,0 +1,25 @@
+.top-bar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.05); /* suave para dark/light */
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.left-buttons button,
+.right-buttons button {
+  margin: 0 4px;
+  transition: all 0.2s ease;
+}
+
+.left-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.right-buttons {
+  display: flex;
+  align-items: center;
+}
