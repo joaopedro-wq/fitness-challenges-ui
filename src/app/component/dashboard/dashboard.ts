@@ -20,9 +20,7 @@ import { AppTopBar } from '../app-top-bar/app-top-bar';
     NzMenuModule,
     NzIconModule,
     NzButtonModule,
-    RouterOutlet,
-    Theme,
-    AppTopBar,
+    
   ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css'],
@@ -60,6 +58,7 @@ export class Dashboard {
   menuItems: MenuItem[] = [
     { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
     { label: 'Configurações', icon: 'setting', route: '/outro' },
+    { label: 'Challenges', icon: 'team', route: '/challenge' },
   ];
 
   isActive(route: string): boolean {

@@ -1,0 +1,51 @@
+<div class="challenge-container" [@fadeIn]>
+  <!-- Header -->
+  <header class="challenge-header">
+    <h1>{{ desafioSelecionado?.titulo }}</h1>
+
+    <div
+      class="difficulty-badge"
+      [ngClass]="getDifficultyClass(desafioSelecionado?.dificuldade)"
+    >
+      <span>{{ desafioSelecionado?.dificuldade | uppercase }}</span>
+    </div>
+  </header>
+
+  
+
+  <div>
+    <span class="info-item">
+      {{ desafioSelecionado?.descricao }}
+    </span>
+  </div>
+  <div>
+    <span class="info-item">
+      <i nz-icon nzType="trophy" class="info-icon"></i>
+      {{ desafioSelecionado?.pontos_recompensa }} pts
+    </span>
+    <span class="info-item">
+      <i nz-icon nzType="calendar" class="info-icon"></i>
+      {{ desafioSelecionado?.duracao_dias }} dias
+    </span>
+  </div>
+  <div class="registro-grid">
+    <button
+      *ngFor="let dia of duracaoArray; let i = index"
+      (click)="registrarDia(i + 1)"
+      [@diaToggle]="isDiaRegistrado(i + 1) ? 'checked' : 'unchecked'"
+      [ngClass]="{ registrado: isDiaRegistrado(i + 1) }"
+      tabindex="0"
+      role="button"
+      [attr.aria-pressed]="isDiaRegistrado(i + 1)"
+      (keydown.enter)="registrarDia(i + 1)"
+      (keydown.space)="registrarDia(i + 1)"
+      class="dia-button"
+      type="button"
+    >
+      <ng-container *ngIf="isDiaRegistrado(i + 1)">
+        <i nz-icon nzType="check" nzTheme="outline" class="icon-check"></i>
+      </ng-container>
+      Dia {{ i + 1 }}
+    </button>
+  </div>
+</div>

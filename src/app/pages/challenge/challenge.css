@@ -1,0 +1,113 @@
+.challenge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.challenge-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.challenge-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+}
+
+
+.challenge-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.challenge-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+}
+
+.dificuldade-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dificuldade-badge.facil {
+  color: #22c55e;
+}
+.dificuldade-badge.medio {
+  color: #f59e0b;
+}
+.dificuldade-badge.dificil {
+  color: #ef4444;
+}
+
+.descricao {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  margin: 0.5rem 0;
+  flex: 1;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  opacity: 0.8;
+  margin-bottom: 0.8rem;
+}
+
+.info-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.cta {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: linear-gradient(135deg, #c78ccc, #7d0888);
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 0.9rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+
+
+.info-icon,
+.cta-icon {
+  font-size: 1rem;
+}
+.challenge-card.facil {
+  border-left: 4px solid #22c55e;
+}
+.challenge-card.medio {
+  border-left: 4px solid #f59e0b;
+}
+.challenge-card.dificil {
+  border-left: 4px solid #ef4444;
+}

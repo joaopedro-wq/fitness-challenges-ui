@@ -1,0 +1,41 @@
+<div [@staggerFadeScale] class="challenge-grid">
+  <div
+    *ngFor="let d of desafios"
+    class="challenge-card"
+    [ngClass]="d.dificuldade"
+  >
+    <!-- Header -->
+    <div class="challenge-header">
+      <h3>{{ d.titulo }}</h3>
+      <span class="dificuldade-badge" [ngClass]="d.dificuldade">
+        {{ d.dificuldade | uppercase }}
+      </span>
+    </div>
+
+    <!-- Descrição -->
+    <p class="descricao">{{ d.descricao }}</p>
+
+    <!-- Info -->
+    <div class="info">
+      <span class="info-item">
+        <i nz-icon nzType="trophy" class="info-icon"></i>
+        {{ d.pontos_recompensa }} pts
+      </span>
+      <span class="info-item">
+        <i nz-icon nzType="calendar" class="info-icon"></i>
+        {{ d.duracao_dias }} dias
+      </span>
+    </div>
+
+    <!-- CTA -->
+    <button class="cta" (click)="abrirDetalhe(d.id)">
+      <i
+        nz-icon
+        nzType="rocket"
+        class="cta-icon"
+        
+      ></i>
+      Quero participar
+    </button>
+  </div>
+</div>
