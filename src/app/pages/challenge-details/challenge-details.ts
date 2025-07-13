@@ -19,6 +19,7 @@ import { Desafio } from '../../api/Desafio';
 import { AppTopBar } from '../../component/app-top-bar/app-top-bar';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { TopBarButton } from '../../api/TopBarButton';
+import { ThemeService } from '../../service/theme.service';
 
 @Component({
   selector: 'app-challenge-details',
@@ -107,7 +108,7 @@ export class ChallengeDetails implements OnInit {
   desafioSelecionado?: Desafio;
   diasRegistrados: number[] = [];
   diasFotos: { [dia: number]: string } = {};
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, public themeService: ThemeService) {}
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -165,5 +166,9 @@ export class ChallengeDetails implements OnInit {
 
   isDiaRegistrado(dia: number): boolean {
     return !!this.diasFotos[dia];
+  }
+
+  isDark(): boolean {
+    return this.themeService.currentTheme === 'dark';
   }
 }

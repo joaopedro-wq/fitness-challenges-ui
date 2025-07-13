@@ -1,57 +1,71 @@
-
-
-
 <div class="challenge-details-container">
- 
-    <app-top-bar [buttons]="topBarButtons"></app-top-bar> 
-  
+  <app-top-bar [buttons]="topBarButtons"></app-top-bar>
+
   <!-- Card Principal -->
   <nz-card nzBordered>
     <h2>{{ desafioSelecionado?.titulo }}</h2>
     <p class="descricao">{{ desafioSelecionado?.descricao }}</p>
     <div class="info-row">
-      <span><i nz-icon nzType="trophy"></i> {{ desafioSelecionado?.pontos_recompensa }} pontos</span>
-      <span><i nz-icon nzType="calendar"></i> {{ desafioSelecionado?.duracao_dias }} dias</span>
+      <span
+        ><i nz-icon nzType="trophy"></i>
+        {{ desafioSelecionado?.pontos_recompensa }} pontos</span
+      >
+      <span
+        ><i nz-icon nzType="calendar"></i>
+        {{ desafioSelecionado?.duracao_dias }} dias</span
+      >
     </div>
     <nz-progress [nzPercent]="progresso"></nz-progress>
 
     <div class="dias-container">
       <button
+        [ngClass]="{ 'footer-dark': isDark(), 'footer-light': !isDark() }"
         *ngFor="let _ of duracaoArray; let i = index"
         [@diaToggle]="isDiaRegistrado(i + 1) ? 'on' : 'off'"
         (click)="abrirCameraOuGaleria(i + 1)"
         class="dia-btn"
       >
-        <img *ngIf="diasFotos[i + 1]" [src]="diasFotos[i + 1]" alt="Foto do dia" class="dia-thumb" />
+        <img
+          *ngIf="diasFotos[i + 1]"
+          [src]="diasFotos[i + 1]"
+          alt="Foto do dia"
+          class="dia-thumb"
+        />
         <i *ngIf="!diasFotos[i + 1]" nz-icon nzType="camera"></i>
         Dia {{ i + 1 }}
       </button>
     </div>
-
-    <button nz-button nzType="primary" nzBlock>
-      Marcar como Concluído
-    </button>
   </nz-card>
 
-  <!-- Ranking -->
   <nz-card nzBordered>
-    <h3>🏆 Ranking</h3>
+    <h3 class="ranking-title">🏆 Ranking</h3>
     <div [@staggerFadeIn] class="ranking-list">
-      <div *ngFor="let r of ranking; index as i" class="ranking-item">
-        <div
-          class="avatar-circle"
-          [ngClass]="{
-            'avatar-gold': i === 0,
-            'avatar-silver': i === 1,
-            'avatar-bronze': i === 2,
-            'avatar-default': i > 2
-          }"
-        >
-          {{ r.nome.charAt(0) }}
+      <div
+        *ngFor="let r of ranking; index as i"
+        class="ranking-item"
+        [ngClass]="{
+          'footer-dark': isDark(),
+          'footer-light': !isDark()
+        }"
+      >
+        <div class="avatar-container">
+          <div
+            class="avatar-circle"
+            [ngClass]="{
+              'gold-border': i === 0,
+              'silver-border': i === 1,
+              'bronze-border': i === 2
+            }"
+          >
+            {{ r.nome.charAt(0) }}
+          </div>
+          <div *ngIf="i === 0" class="medal">🥇</div>
+          <div *ngIf="i === 1" class="medal">🥈</div>
+          <div *ngIf="i === 2" class="medal">🥉</div>
         </div>
         <div class="ranking-info">
-          <span>{{ i + 1 }}. {{ r.nome }}</span>
-          <small>{{ r.dias }} dias</small>
+          <div class="ranking-name">{{ i + 1 }}. {{ r.nome }}</div>
+          <div class="ranking-days">{{ r.dias }} dias</div>
         </div>
       </div>
     </div>
