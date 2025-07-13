@@ -1,9 +1,6 @@
 .top-bar-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 8px;
-  margin-bottom: 16px;
+  width: 100%; 
+  border-radius: 15px;
 }
 
 .left-buttons button,
@@ -12,15 +9,19 @@
   transition: all 0.2s ease;
 }
 
-.left-buttons {
+.left-buttons,
+.right-buttons {
   display: flex;
   align-items: center;
 }
 
 .right-buttons {
+  margin-left: auto; 
+}
+
+::ng-deep .top-bar-container .ant-card-body {
   display: flex;
   align-items: center;
-}
-::ng-deep .top-bar-card .ant-card-body {
-  padding: 0 !important;
+  padding: 10px 8px;
+  
 }

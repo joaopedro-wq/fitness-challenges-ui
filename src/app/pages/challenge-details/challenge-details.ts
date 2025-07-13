@@ -63,46 +63,7 @@ import { ThemeService } from '../../service/theme.service';
 })
 export class ChallengeDetails implements OnInit {
   desafios: Desafio[] = [
-    {
-      id: 1,
-      titulo: 'Caminhada de 5km',
-      descricao: 'Complete 5km de caminhada durante a semana.',
-      dificuldade: 'facil',
-      pontos_recompensa: 10,
-      duracao_dias: 7,
-    },
-    {
-      id: 2,
-      titulo: '100 abdominais',
-      descricao: 'Faça 100 abdominais em um dia.',
-      dificuldade: 'medio',
-      pontos_recompensa: 20,
-      duracao_dias: 1,
-    },
-    {
-      id: 3,
-      titulo: 'Corrida de 10km',
-      descricao: 'Corra 10km em uma semana.',
-      dificuldade: 'dificil',
-      pontos_recompensa: 50,
-      duracao_dias: 7,
-    },
-    {
-      id: 4,
-      titulo: 'Yoga 30 min',
-      descricao: 'Pratique yoga por 30 minutos por 3 dias.',
-      dificuldade: 'facil',
-      pontos_recompensa: 15,
-      duracao_dias: 3,
-    },
-    {
-      id: 5,
-      titulo: 'Treino HIIT',
-      descricao: 'Realize 3 treinos HIIT na semana.',
-      dificuldade: 'medio',
-      pontos_recompensa: 30,
-      duracao_dias: 7,
-    },
+    
   ];
    topBarButtons: TopBarButton[] = [];
   desafioSelecionado?: Desafio;

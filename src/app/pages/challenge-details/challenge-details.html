@@ -17,7 +17,7 @@
     </div>
     <nz-progress [nzPercent]="progresso"></nz-progress>
 
-    <div class="dias-container">
+    <div class="dias-container" [@staggerFadeIn]>
       <button
         [ngClass]="{ 'footer-dark': isDark(), 'footer-light': !isDark() }"
         *ngFor="let _ of duracaoArray; let i = index"

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -16,6 +16,9 @@ import {
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { Desafio } from '../../api/Desafio';
 import { Router } from '@angular/router';
+import { ChallengeService } from '../../service/challenge.service';
+import { TopBarButton } from '../../api/TopBarButton';
+import { AppTopBar } from '../../component/app-top-bar/app-top-bar';
 
 @Component({
   selector: 'app-challenge',
@@ -27,6 +30,7 @@ import { Router } from '@angular/router';
     NzTagModule,
     NzTypographyModule,
     NzIconModule,
+    AppTopBar
   ],
   templateUrl: './challenge.html',
   styleUrl: './challenge.css',
@@ -53,51 +57,24 @@ import { Router } from '@angular/router';
     ]),
   ],
 })
-export class Challenge {
-  constructor(public router: Router) {}
-  desafios: Desafio[] = [
+export class Challenge implements OnInit {
+  constructor(public router: Router, public challengeService: ChallengeService) {}
+  desafios: Desafio[] = [];
+  topBarButtons: TopBarButton[] = [
     {
-      id: 1,
-      titulo: 'Caminhada de 5km',
-      descricao: 'Complete 5km de caminhada durante a semana.',
-      dificuldade: 'facil',
-      pontos_recompensa: 10,
-      duracao_dias: 7,
-    },
-    {
-      id: 2,
-      titulo: '100 abdominais',
-      descricao: 'Faça 100 abdominais em um dia.',
-      dificuldade: 'medio',
-      pontos_recompensa: 20,
-      duracao_dias: 1,
-    },
-    {
-      id: 3,
-      titulo: 'Corrida de 10km',
-      descricao: 'Corra 10km em uma semana.',
-      dificuldade: 'dificil',
-      pontos_recompensa: 50,
-      duracao_dias: 7,
-    },
-    {
-      id: 4,
-      titulo: 'Yoga 30 min',
-      descricao: 'Pratique yoga por 30 minutos por 3 dias.',
-      dificuldade: 'facil',
-      pontos_recompensa: 15,
-      duracao_dias: 3,
-    },
-    {
-      id: 5,
-      titulo: 'Treino HIIT',
-      descricao: 'Realize 3 treinos HIIT na semana.',
-      dificuldade: 'medio',
-      pontos_recompensa: 30,
-      duracao_dias: 7,
-    },
-  ];
-
+      label: 'Adicionar Desafio',
+      icon: 'plus',
+      type: 'primary',
+      danger: true,
+      action: () => this.router.navigate(['/challenge-create']),
+    }
+  ]
+  ngOnInit() {
+     this.challengeService.indexAll().subscribe((response) => {
+     this.desafios = response.data; 
+   
+  });
+  }
   getDificuldadeIcon(dificuldade: string): string {
     switch (dificuldade) {
       case 'facil':
