@@ -1,51 +1,59 @@
-<div class="challenge-container" [@fadeIn]>
-  <!-- Header -->
-  <header class="challenge-header">
-    <h1>{{ desafioSelecionado?.titulo }}</h1>
 
-    <div
-      class="difficulty-badge"
-      [ngClass]="getDifficultyClass(desafioSelecionado?.dificuldade)"
-    >
-      <span>{{ desafioSelecionado?.dificuldade | uppercase }}</span>
-    </div>
-  </header>
 
+
+<div class="challenge-details-container">
+ 
+    <app-top-bar [buttons]="topBarButtons"></app-top-bar> 
   
+  <!-- Card Principal -->
+  <nz-card nzBordered>
+    <h2>{{ desafioSelecionado?.titulo }}</h2>
+    <p class="descricao">{{ desafioSelecionado?.descricao }}</p>
+    <div class="info-row">
+      <span><i nz-icon nzType="trophy"></i> {{ desafioSelecionado?.pontos_recompensa }} pontos</span>
+      <span><i nz-icon nzType="calendar"></i> {{ desafioSelecionado?.duracao_dias }} dias</span>
+    </div>
+    <nz-progress [nzPercent]="progresso"></nz-progress>
 
-  <div>
-    <span class="info-item">
-      {{ desafioSelecionado?.descricao }}
-    </span>
-  </div>
-  <div>
-    <span class="info-item">
-      <i nz-icon nzType="trophy" class="info-icon"></i>
-      {{ desafioSelecionado?.pontos_recompensa }} pts
-    </span>
-    <span class="info-item">
-      <i nz-icon nzType="calendar" class="info-icon"></i>
-      {{ desafioSelecionado?.duracao_dias }} dias
-    </span>
-  </div>
-  <div class="registro-grid">
-    <button
-      *ngFor="let dia of duracaoArray; let i = index"
-      (click)="registrarDia(i + 1)"
-      [@diaToggle]="isDiaRegistrado(i + 1) ? 'checked' : 'unchecked'"
-      [ngClass]="{ registrado: isDiaRegistrado(i + 1) }"
-      tabindex="0"
-      role="button"
-      [attr.aria-pressed]="isDiaRegistrado(i + 1)"
-      (keydown.enter)="registrarDia(i + 1)"
-      (keydown.space)="registrarDia(i + 1)"
-      class="dia-button"
-      type="button"
-    >
-      <ng-container *ngIf="isDiaRegistrado(i + 1)">
-        <i nz-icon nzType="check" nzTheme="outline" class="icon-check"></i>
-      </ng-container>
-      Dia {{ i + 1 }}
+    <div class="dias-container">
+      <button
+        *ngFor="let _ of duracaoArray; let i = index"
+        [@diaToggle]="isDiaRegistrado(i + 1) ? 'on' : 'off'"
+        (click)="abrirCameraOuGaleria(i + 1)"
+        class="dia-btn"
+      >
+        <img *ngIf="diasFotos[i + 1]" [src]="diasFotos[i + 1]" alt="Foto do dia" class="dia-thumb" />
+        <i *ngIf="!diasFotos[i + 1]" nz-icon nzType="camera"></i>
+        Dia {{ i + 1 }}
+      </button>
+    </div>
+
+    <button nz-button nzType="primary" nzBlock>
+      Marcar como Concluído
     </button>
-  </div>
+  </nz-card>
+
+  <!-- Ranking -->
+  <nz-card nzBordered>
+    <h3>🏆 Ranking</h3>
+    <div [@staggerFadeIn] class="ranking-list">
+      <div *ngFor="let r of ranking; index as i" class="ranking-item">
+        <div
+          class="avatar-circle"
+          [ngClass]="{
+            'avatar-gold': i === 0,
+            'avatar-silver': i === 1,
+            'avatar-bronze': i === 2,
+            'avatar-default': i > 2
+          }"
+        >
+          {{ r.nome.charAt(0) }}
+        </div>
+        <div class="ranking-info">
+          <span>{{ i + 1 }}. {{ r.nome }}</span>
+          <small>{{ r.dias }} dias</small>
+        </div>
+      </div>
+    </div>
+  </nz-card>
 </div>

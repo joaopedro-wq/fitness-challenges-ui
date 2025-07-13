@@ -1,132 +1,111 @@
-.challenge-container {
-  max-width: 1100px;
-  margin: 2rem auto 3rem;
-  padding: 2rem 2.5rem;
-  border-radius: 1rem;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  box-shadow:
-    0 8px 24px rgba(0,0,0,0.06),
-    inset 0 0 8px rgba(255,255,255,0.05);
+.challenge-details-container {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  gap: 1rem;
+  max-width: none;
+  padding: 1rem;
 }
 
-.challenge-header {
+
+@media (min-width: 768px) {
+  .challenge-details-container {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.descricao {
+  opacity: 0.8;
+  margin-bottom: 0.5rem;
+}
+
+.info-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  margin-bottom: 0.5rem;
 }
 
-.challenge-header h1 {
-  font-size: 2.25rem;
-  font-weight: 700;
-  margin: 0;
-  color: var(--text-color);
-}
-
-/* Dificuldade minimalista */
-.difficulty-badge {
+.dias-container {
   display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.4rem 1rem;
-  border-radius: 2rem;
-  font-weight: 500;
-  font-size: 0.9rem;
-  background: rgba(255 255 255 / 0.08);
-  border: 1.2px solid rgba(255 255 255 / 0.15);
-  color: var(--text-secondary-color);
-  user-select: none;
-  cursor: default;
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-  box-shadow:
-    0 0 4px rgba(0, 0, 0, 0.05);
+  flex-wrap: wrap;
+  gap: 1.3rem;
+  margin: 1rem 0;
 }
 
-.difficulty-badge:hover {
-  background: rgba(255 255 255 / 0.18);
-  border-color: rgba(255 255 255 / 0.3);
-  color: var(--primary-color);
-  box-shadow:
-    0 0 12px var(--primary-color);
-}
-
-/* Ícone da dificuldade */
-.difficulty-icon {
-  font-size: 1.25rem;
-  line-height: 1;
-  color: inherit;
-}
-
-/* Grid dos dias */
-.registro-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-  gap: 1rem;
-}
-
-/* Botões dos dias com glassmorphism suave */
-.dia-button {
-  background: rgba(255 255 255 / 0.1);
-  border: 1.5px solid rgba(255 255 255 / 0.2);
-  box-shadow:
-    4px 4px 10px rgba(0,0,0,0.05),
-    inset 0 0 8px rgba(255 255 255 / 0.3);
-  color: var(--text-secondary-color);
-  border-radius: 1rem;
-  font-weight: 600;
-  font-size: 1rem;
-  padding: 0.7rem 1.2rem;
-  cursor: pointer;
-  user-select: none;
-  transition:
-    background 0.35s ease,
-    border-color 0.35s ease,
-    color 0.3s ease,
-    box-shadow 0.3s ease,
-    transform 0.2s ease;
+.dia-btn {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.3rem;
+  width: 85px;
+  height: 85px;
+  border-radius: 0.6rem;
+  background: rgba(125, 8, 136, 0.05);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  overflow: hidden;
+  flex-direction: column;
+  font-size: 0.75rem;
 }
 
-.dia-button:hover,
-.dia-button:focus {
-  background: rgba(255 255 255 / 0.2);
-  border-color: var(--primary-color);
-  color: var(--primary-color);
-  outline: none;
-  box-shadow:
-    0 0 12px var(--primary-color),
-    inset 0 0 12px rgba(255 255 255 / 0.5);
-  transform: translateY(-3px);
+.dia-btn:hover {
+  background: rgba(125, 8, 136, 0.1);
+  transform: scale(1.05);
 }
 
-.dia-button.registrado {
-  background: var(--primary-color);
-  border-color: var(--primary-color);
- 
- 
-  cursor: default;
-  transform: none;
+.dia-thumb {
+  width: 80%;
+  height: 60%;
+  object-fit: cover;
+  border-radius: 0.4rem;
 }
 
-.dia-button.registrado:hover,
-.dia-button.registrado:focus {
-  background: var(--primary-color-dark);
-  border-color: var(--primary-color-dark);
- 
-  cursor: default;
-  transform: none;
+.ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-/* Ícone check */
-.icon-check {
-  font-size: 1.3rem;
-  line-height: 1;
-  color: inherit;
+.ranking-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(125, 8, 136, 0.03);
+  padding: 0.5rem 0.7rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s, transform 0.15s;
 }
+
+.ranking-item:hover {
+  background: rgba(125, 8, 136, 0.07);
+  transform: translateY(-2px);
+}
+
+.avatar-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.avatar-gold { background: linear-gradient(135deg, #FFD700, #FFC700); }
+.avatar-silver { background: linear-gradient(135deg, #C0C0C0, #B0B0B0); }
+.avatar-bronze { background: linear-gradient(135deg, #CD7F32, #B87333); }
+.avatar-default { background: #7d0888; }
+
+.ranking-info {
+  display: flex;
+  flex-direction: column;
+}
+
+::ng-deep nz-card {
+  border-radius: 0.75rem !important;
+  overflow: hidden;
+}
+

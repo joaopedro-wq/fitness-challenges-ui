@@ -21,7 +21,7 @@ import { TopBarButton } from './api/TopBarButton';
     NzButtonModule,
     RouterOutlet,
     Theme,
-    AppTopBar,
+    
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'

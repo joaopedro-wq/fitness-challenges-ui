@@ -12,8 +12,13 @@ import {
   animate,
   transition,
   state,
+  query,
+  stagger,
 } from '@angular/animations';
 import { Desafio } from '../../api/Desafio';
+import { AppTopBar } from '../../component/app-top-bar/app-top-bar';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { TopBarButton } from '../../api/TopBarButton';
 
 @Component({
   selector: 'app-challenge-details',
@@ -25,29 +30,33 @@ import { Desafio } from '../../api/Desafio';
     NzIconModule,
     NzProgressModule,
     NzTagModule,
+    AppTopBar,
+    NzLayoutModule,
   ],
   templateUrl: './challenge-details.html',
   styleUrls: ['./challenge-details.css'],
   animations: [
-    trigger('fadeIn', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(10px)' }),
-        animate('400ms ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
+    trigger('staggerFadeIn', [
+      transition('* => *', [
+        query(
+          ':enter',
+          [
+            style({ opacity: 0, transform: 'translateY(10px) scale(0.98)' }),
+            stagger(480, [
+              animate(
+                '300ms ease-out',
+                style({ opacity: 1, transform: 'translateY(0) scale(1)' })
+              ),
+            ]),
+          ],
+          { optional: true }
+        ),
       ]),
     ]),
     trigger('diaToggle', [
       state('off', style({ opacity: 0.6, transform: 'scale(1)' })),
       state('on', style({ opacity: 1, transform: 'scale(1.15)' })),
-      transition('off <=> on', animate('250ms ease-in-out')),
-    ]),
-    trigger('checkFade', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'scale(0.5)' }),
-        animate('200ms ease-out', style({ opacity: 1, transform: 'scale(1)' })),
-      ]),
-      transition(':leave', [
-        animate('150ms ease-in', style({ opacity: 0, transform: 'scale(0.5)' })),
-      ]),
+      transition('off <=> on', animate('200ms ease-in-out')),
     ]),
   ],
 })
@@ -94,10 +103,10 @@ export class ChallengeDetails implements OnInit {
       duracao_dias: 7,
     },
   ];
-
+   topBarButtons: TopBarButton[] = [];
   desafioSelecionado?: Desafio;
   diasRegistrados: number[] = [];
-
+  diasFotos: { [dia: number]: string } = {};
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
@@ -111,70 +120,50 @@ export class ChallengeDetails implements OnInit {
     }
   }
 
-  registrarDia(dia: number) {
-    if (this.diasRegistrados.includes(dia)) {
-      this.diasRegistrados = this.diasRegistrados.filter((d) => d !== dia);
-    } else {
-      this.diasRegistrados.push(dia);
-    }
-
-    // Salvar progresso no localStorage
-    if (this.desafioSelecionado) {
-      localStorage.setItem(
-        `desafio_${this.desafioSelecionado.id}_dias`,
-        JSON.stringify(this.diasRegistrados)
-      );
-    }
-  }
-
-  isDiaRegistrado(dia: number): boolean {
-    return this.diasRegistrados.includes(dia);
-  }
 
   get duracaoArray(): number[] {
-    if (!this.desafioSelecionado) return [];
-    return Array(this.desafioSelecionado.duracao_dias).fill(0);
+    return this.desafioSelecionado
+      ? Array(this.desafioSelecionado.duracao_dias).fill(0)
+      : [];
   }
 
   get progresso(): number {
-    if (!this.desafioSelecionado) return 0;
-    return (
-      (this.diasRegistrados.length / this.desafioSelecionado.duracao_dias) * 100
-    );
+    return this.desafioSelecionado
+      ? Math.round((Object.keys(this.diasFotos).length / this.desafioSelecionado.duracao_dias) * 100)
+      : 0;
   }
 
   formatProgresso = (percent: number) => `${percent.toFixed(0)}%`;
 
-  getDifficultyClass(dificuldade?: string): string {
-  switch ((dificuldade || '').toLowerCase()) {
-    case 'fácil':
-    case 'facil':
-      return 'difficulty-easy';
-    case 'médio':
-    case 'medio':
-      return 'difficulty-medium';
-    case 'difícil':
-    case 'dificil':
-      return 'difficulty-hard';
-    default:
-      return '';
-  }
-}
-getDifficultyIcon(dificuldade?: string): string {
-  switch ((dificuldade || '').toLowerCase()) {
-    case 'fácil':
-    case 'facil':
-      return 'smile';
-    case 'médio':
-    case 'medio':
-      return 'meh';
-    case 'difícil':
-    case 'dificil':
-      return 'frown';
-    default:
-      return 'question-circle';
-  }
-}
+  
+  ranking = [
+    { nome: 'João', dias: 7, pontos: 100 },
+    { nome: 'Ana', dias: 6, pontos: 90 },
+    { nome: 'Carlos', dias: 5, pontos: 80 },
+    { nome: 'Lúcia', dias: 4, pontos: 70 },
+    { nome: 'Bruno', dias: 3, pontos: 60 },
+  ];
 
+  abrirCameraOuGaleria(dia: number) {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.capture = 'environment';
+    input.onchange = (event: any) => {
+      const file = event.target.files[0];
+      if (!file) return;
 
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.diasFotos[dia] = reader.result as string;
+        localStorage.setItem(`desafio_${this.desafioSelecionado?.id}_diasFotos`, JSON.stringify(this.diasFotos));
+      };
+      reader.readAsDataURL(file);
+    };
+    input.click();
+  }
+
+  isDiaRegistrado(dia: number): boolean {
+    return !!this.diasFotos[dia];
+  }
 }
