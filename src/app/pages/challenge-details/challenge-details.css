@@ -17,6 +17,6 @@
 
 /* Fundo principal tema escuro: degrade escuro suave */
 .bg-main-gradient-dark {
-  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+ 
   color: #f9fafb; /* texto claro */
 }

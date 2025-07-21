@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -21,6 +27,7 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { TopBarButton } from '../../api/TopBarButton';
 import { ThemeService } from '../../service/theme.service';
 import { ChallengeService } from '../../service/challenge.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-challenge-details',
@@ -37,46 +44,52 @@ import { ChallengeService } from '../../service/challenge.service';
   ],
   templateUrl: './challenge-details.html',
   styleUrls: ['./challenge-details.css'],
-  animations: [
-    trigger('staggerFadeIn', [
-      transition('* => *', [
-        query(
-          ':enter',
-          [
-            style({ opacity: 0, transform: 'translateY(10px) scale(0.98)' }),
-            stagger(480, [
-              animate(
-                '300ms ease-out',
-                style({ opacity: 1, transform: 'translateY(0) scale(1)' })
-              ),
-            ]),
-          ],
-          { optional: true }
-        ),
-      ]),
+ animations: [
+  trigger('pageSlideFade', [
+    transition(':enter', [
+      style({ opacity: 0, transform: 'translateY(40px)' }),
+      animate(
+        '500ms ease-out',
+        style({ opacity: 1, transform: 'translateY(0)' })
+      ),
     ]),
-    trigger('diaToggle', [
-      state('off', style({ opacity: 0.6, transform: 'scale(1)' })),
-      state('on', style({ opacity: 1, transform: 'scale(1.15)' })),
-      transition('off <=> on', animate('200ms ease-in-out')),
+    transition(':leave', [
+      animate(
+        '300ms ease-in',
+        style({ opacity: 0, transform: 'translateY(40px)' })
+      ),
     ]),
-    trigger('pageStagger', [
-      transition(':enter', [
-        query('.stagger-item', [
-          style({ opacity: 0, transform: 'translateY(20px)' }),
-          stagger(400, [
-            animate('600ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-          ])
-        ], { optional: true })
-      ])
-    ])
-  ],
+  ]),
+
+  trigger('itemCascadeFade', [
+    transition(':enter', [
+      query(
+        '.cascade-item',
+        [
+          style({ opacity: 0, transform: 'translateY(15px)' }),
+          stagger(100, [
+            animate(
+              '400ms ease-out',
+              style({ opacity: 1, transform: 'translateY(0)' })
+            ),
+          ]),
+        ],
+        { optional: true }
+      ),
+    ]),
+  ]),
+
+  trigger('diaToggle', [
+    state('off', style({ opacity: 0.6, transform: 'scale(1)' })),
+    state('on', style({ opacity: 1, transform: 'scale(1.12)' })),
+    transition('off <=> on', animate('250ms ease-in-out')),
+  ]),
+]
+
 })
-export class ChallengeDetails implements OnInit {
+export class ChallengeDetails implements OnInit, OnDestroy, AfterViewInit {
   desafios: Desafio[] = [];
-  topBarButtons: TopBarButton[] = [
-    
-  ];
+  topBarButtons: TopBarButton[] = [];
   desafioSelecionado?: Desafio;
   diasRegistrados: number[] = [];
   diasFotos: { [dia: number]: string } = {};
@@ -84,16 +97,26 @@ export class ChallengeDetails implements OnInit {
     private route: ActivatedRoute,
     public themeService: ThemeService,
     public challengeService: ChallengeService,
-    public router: Router
+    public router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
+
+  private subscription = new Subscription();
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.challengeService.indexId(id).subscribe((desafio) => {
+    const sub = this.challengeService.indexId(id).subscribe((desafio) => {
       this.desafioSelecionado = desafio;
     });
+    this.subscription.add(sub);
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+  ngAfterViewInit() {
+    this.cdr.detectChanges();
+  }
   get duracaoArray(): number[] {
     return this.desafioSelecionado
       ? Array(this.desafioSelecionado.duracao_dias).fill(0)
@@ -153,7 +176,5 @@ export class ChallengeDetails implements OnInit {
     this.router.navigate(['/challenge-details', id]);
   }
 
-  save() {
-   
-  }
+  save() {}
 }
