@@ -40,6 +40,7 @@
       <!-- Subtítulo -->
       <p
         [@fadeSlideInDelayed]
+        (@fadeSlideInDelayed.done)="onSubtitleAnimationDone()"
         [ngClass]="{
           'text-gray-600': !isDark(),
           'text-gray-300': isDark()
@@ -51,12 +52,12 @@
 
       <!-- Grid de Cards -->
       <div
+        *ngIf="cardsAnimationStart"
         class="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
       >
         <div
           *ngFor="let c of desafios; let i = index"
-          [@fadeSlideScaleItem]
-          [style.animationDelay]="i * 100 + 'ms'"
+          [@staggerCards]="{ value: '', params: { delay: i * 200 + 'ms' } }"
           class="rounded-xl shadow-md overflow-hidden flex flex-col transition-transform duration-300 ease-in-out hover:scale-[1.02]"
           [ngClass]="{
             'text-gray-800': !isDark(),

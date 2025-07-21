@@ -39,27 +39,23 @@ import { ThemeService } from '../../service/theme.service';
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(-20px)' }),
         animate(
-          '500ms 300ms ease-out',
+          '500ms 500ms ease-out',
           style({ opacity: 1, transform: 'translateY(0)' })
         ), // 300ms delay
       ]),
     ]),
     trigger('staggerCards', [
-      transition(':enter', [
-        query(
-          ':enter',
-          [
-            style({ opacity: 0, transform: 'translateY(10px)' }),
-            stagger(100, [
-              animate(
-                '400ms ease-out',
-                style({ opacity: 1, transform: 'translateY(0)' })
-              ),
-            ]),
-          ],
-          { optional: true }
-        ),
-      ]),
+      transition(
+        ':enter',
+        [
+          style({ opacity: 0, transform: 'translateY(20px)' }),
+          animate(
+            '500ms {{delay}} ease-out',
+            style({ opacity: 1, transform: 'translateY(0)' })
+          ),
+        ],
+        { params: { delay: '0ms' } }
+      ),
     ]),
     trigger('fadeSlideScaleItem', [
       transition(':enter', [
@@ -105,6 +101,7 @@ export class Challenge implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.desafiosSubscription?.unsubscribe();
+    this.cardsAnimationStart = false;
   }
 
   abrirDetalhe(id: number) {
@@ -113,5 +110,10 @@ export class Challenge implements OnInit, OnDestroy {
 
   isDark(): boolean {
     return this.themeService.currentTheme === 'dark';
+  }
+  cardsAnimationStart = false;
+
+  onSubtitleAnimationDone() {
+    this.cardsAnimationStart = true;
   }
 }
