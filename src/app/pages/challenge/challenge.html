@@ -2,14 +2,14 @@
   class="flex flex-col h-full overflow-hidden mx-auto px-4 max-w-7xl"
 >
   <!-- Top Bar -->
-  <app-top-bar [buttons]="topBarButtons"></app-top-bar>
-
+  
   <div class="w-full rounded-2xl overflow-hidden mt-4">
     <nz-card nzBordered>
+      <app-top-bar [buttons]="topBarButtons"></app-top-bar>
       <!-- Título -->
       <div
         [@fadeSlideIn]
-        class="flex items-center justify-center mb-2 md:mb-3 gap-3"
+        class="flex items-center justify-center mb-2 md:mb-3 mt-5 gap-3"
       >
         <div
           [ngClass]="{

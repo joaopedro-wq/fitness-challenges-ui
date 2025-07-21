@@ -1,73 +1,262 @@
-<div class="challenge-details-container">
-  <app-top-bar [buttons]="topBarButtons"></app-top-bar>
-
-  <!-- Card Principal -->
-  <nz-card nzBordered>
-    <h2>{{ desafioSelecionado?.titulo }}</h2>
-    <p class="descricao">{{ desafioSelecionado?.descricao }}</p>
-    <div class="info-row">
-      <span
-        ><i nz-icon nzType="trophy"></i>
-        {{ desafioSelecionado?.pontos_recompensa }} pontos</span
-      >
-      <span
-        ><i nz-icon nzType="calendar"></i>
-        {{ desafioSelecionado?.duracao_dias }} dias</span
-      >
-    </div>
-    <nz-progress [nzPercent]="progresso"></nz-progress>
-
-    <div class="dias-container" [@staggerFadeIn]>
+<ng-container
+  class="flex flex-col h-full overflow-auto mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl"
+>
+  <div
+     [@fadeInUp]
+    [ngClass]="{
+    'bg-main-gradient-light': !isDark(),
+    'bg-main-gradient-dark': isDark()
+  }"
+    class="w-full rounded-3xl overflow-hidden mt-6 shadow-xl"
+  >
+    <div
+     [@fadeInUp]
+      [ngClass]="{
+        'bg-white': !isDark(),
+        'bg-neutral-800': isDark()
+      }"
+      class="w-full mx-auto rounded-3xl p-6 sm:p-8 space-y-8 flex flex-col"
+    >
+      <!-- Top Bar -->
+      <app-top-bar [buttons]="topBarButtons" class="mb-6"></app-top-bar>
       <button
-        [ngClass]="{ 'footer-dark': isDark(), 'footer-light': !isDark() }"
-        *ngFor="let _ of duracaoArray; let i = index"
-        [@diaToggle]="isDiaRegistrado(i + 1) ? 'on' : 'off'"
-        (click)="abrirCameraOuGaleria(i + 1)"
-        class="dia-btn"
+       [@fadeInUp]
+        (click)="abrirDetalhe(desafioSelecionado?.id!)"
+        [ngClass]="
+          isDark()
+            ? 'bg-indigo-700 text-gray-100 hover:bg-indigo-600 focus:ring-indigo-500'
+            : 'bg-indigo-500 text-white hover:bg-indigo-600 focus:ring-indigo-400'
+        "
+        class="
+          w-full sm:w-auto self-end font-semibold px-6 py-3 rounded-lg
+          flex items-center justify-center gap-2 text-center
+          transition focus:outline-none focus:ring-2 focus:ring-offset-2 mt-6
+          shadow-md hover:shadow-lg
+        "
+        aria-label="Quero Participar do desafio"
       >
-        <img
-          *ngIf="diasFotos[i + 1]"
-          [src]="diasFotos[i + 1]"
-          alt="Foto do dia"
-          class="dia-thumb"
-        />
-        <i *ngIf="!diasFotos[i + 1]" nz-icon nzType="camera"></i>
-        Dia {{ i + 1 }}
+        Quero Participar
+        <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
       </button>
-    </div>
-  </nz-card>
+      <!-- Imagem de Capa -->
+      <img
+        *ngIf="desafioSelecionado?.url_foto"
+        [src]="desafioSelecionado?.url_foto"
+        alt="Imagem do Desafio"
+        class="
+          w-full max-w-xl mx-auto
+          h-20 sm:h-24 md:h-28
+          object-cover
+          rounded-xl
+          shadow-md
+          border border-gray-300 dark:border-neutral-700
+          transition-transform duration-300 ease-in-out
+          hover:scale-105
+        "
+      />
 
-  <nz-card nzBordered>
-    <h3 class="ranking-title">🏆 Ranking</h3>
-    <div [@staggerFadeIn] class="ranking-list">
-      <div
-        *ngFor="let r of ranking; index as i"
-        class="ranking-item"
+      <!-- Título -->
+      <h2
         [ngClass]="{
-          'footer-dark': isDark(),
-          'footer-light': !isDark()
+          'text-gray-900': !isDark(),
+          'text-gray-100': isDark()
         }"
+        class="
+          text-2xl sm:text-3xl font-extrabold text-center tracking-wide
+          leading-tight
+        "
       >
-        <div class="avatar-container">
-          <div
-            class="avatar-circle"
-            [ngClass]="{
-              'gold-border': i === 0,
-              'silver-border': i === 1,
-              'bronze-border': i === 2
-            }"
-          >
-            {{ r.nome.charAt(0) }}
-          </div>
-          <div *ngIf="i === 0" class="medal">🥇</div>
-          <div *ngIf="i === 1" class="medal">🥈</div>
-          <div *ngIf="i === 2" class="medal">🥉</div>
+        {{ desafioSelecionado?.titulo || 'Carregando...' }}
+      </h2>
+
+      <!-- Descrição -->
+      <p
+        [ngClass]="{
+          'text-gray-700': !isDark(),
+          'text-gray-300': isDark()
+        }"
+        class="text-center max-w-xl mx-auto leading-relaxed text-base sm:text-lg"
+      >
+        {{ desafioSelecionado?.descricao || 'Sem descrição disponível.' }}
+      </p>
+
+      <!-- Informações rápidas -->
+      <div
+        [ngClass]="{
+          'text-gray-600': !isDark(),
+          'text-gray-400': isDark()
+        }"
+        class="flex flex-wrap justify-center space-x-6 text-sm font-semibold"
+      >
+        <span
+          class="flex items-center gap-2"
+          aria-label="Pontos de recompensa"
+          tabindex="0"
+        >
+          <i
+            nz-icon
+            nzType="trophy"
+            nzTheme="fill"
+            [style.color]="isDark() ? '#FBBF24' : '#F59E0B'"
+            class="text-base"
+          ></i>
+          {{ desafioSelecionado?.pontos_recompensa }} pontos
+        </span>
+        <span
+          class="flex items-center gap-2"
+          aria-label="Duração em dias"
+          tabindex="0"
+        >
+          <i
+            nz-icon
+            nzType="calendar"
+            nzTheme="fill"
+            [style.color]="isDark() ? '#60A5FA' : '#3B82F6'"
+            class="text-base"
+          ></i>
+          {{ desafioSelecionado?.duracao_dias }} dias
+        </span>
+        <span
+          class="flex items-center gap-2 capitalize"
+          aria-label="Método de pontuação"
+          tabindex="0"
+        >
+          <i
+            nz-icon
+            nzType="compass"
+            nzTheme="fill"
+            [style.color]="isDark() ? '#818CF8' : '#6366F1'"
+            class="text-base"
+          ></i>
+          {{ desafioSelecionado?.metodo_pontuacao || 'não informado' }}
+        </span>
+      </div>
+
+      <!-- Barra de Progresso -->
+      <nz-progress
+        [nzPercent]="progresso"
+        [nzStrokeColor]="isDark() ? '#60A5FA' : '#3B82F6'"
+        [nzStrokeWidth]="10"
+        class="mt-6 rounded-full"
+      ></nz-progress>
+
+     
+      
+
+      <!-- Grid de Dias -->
+     <!-- Container para centralizar e limitar largura -->
+<div class="flex justify-center">
+  <!-- Grid de Dias -->
+  <div
+    class="
+      grid
+      grid-cols-3 sm:grid-cols-4 md:grid-cols-5
+      gap-3 sm:gap-4 mt-8
+      justify-center
+      max-w-[640px] w-full
+    "
+    [@staggerFadeIn]
+  >
+    <button
+      *ngFor="let _ of duracaoArray; let i = index"
+      (click)="abrirCameraOuGaleria(i + 1)"
+      [@diaToggle]="isDiaRegistrado(i + 1) ? 'on' : 'off'"
+      [ngClass]="{
+        'bg-gradient-light': !isDark(),
+        'bg-gradient-dark': isDark()
+      }"
+      class="
+        aspect-square w-full max-w-[110px]
+        rounded-xl border border-transparent
+        flex flex-col items-center justify-center
+        relative overflow-hidden
+        text-sm shadow
+        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+        cursor-pointer transition-transform duration-150
+        hover:scale-105 hover:shadow-md
+      "
+      [attr.aria-label]="'Dia ' + (i + 1) + (isDiaRegistrado(i + 1) ? ', foto registrada' : ', sem foto registrada')"
+      tabindex="0"
+      nz-tooltip
+    
+    >
+      <ng-container *ngIf="diasFotos[i + 1]; else placeholder">
+        <img
+          [src]="diasFotos[i + 1]"
+          alt="Foto do Dia {{ i + 1 }}"
+          loading="lazy"
+          class="w-full h-full object-cover rounded-xl"
+        />
+        <span
+          class="
+            absolute bottom-1 left-1 right-1
+            text-center text-xs py-0.5
+            bg-black bg-opacity-40 text-white font-semibold select-none rounded
+          "
+        >
+          Dia {{ i + 1 }}
+        </span>
+      </ng-container>
+      <ng-template #placeholder>
+        <i
+          nz-icon
+          nzType="camera"
+          nzTheme="outline"
+          [style.color]="isDark() ? '#D1D5DB' : '#6B7280'"
+          class="text-4xl"
+        ></i>
+        <span
+          [ngClass]="{
+            'text-gray-700': !isDark(),
+            'text-gray-300': isDark()
+          }"
+          class="mt-1 font-semibold text-sm"
+        >
+          Dia {{ i + 1 }}
+        </span>
+      </ng-template>
+    </button>
+  </div>
+</div>
+
+    </div>
+  </div>
+</ng-container>
+
+
+
+
+
+<!-- <nz-card nzBordered>
+  <h3 class="ranking-title">🏆 Ranking</h3>
+  <div [@staggerFadeIn] class="ranking-list">
+    <div
+      *ngFor="let r of ranking; index as i"
+      class="ranking-item"
+      [ngClass]="{
+        'footer-dark': isDark(),
+        'footer-light': !isDark()
+      }"
+    >
+      <div class="avatar-container">
+        <div
+          class="avatar-circle"
+          [ngClass]="{
+            'gold-border': i === 0,
+            'silver-border': i === 1,
+            'bronze-border': i === 2
+          }"
+        >
+          {{ r.nome.charAt(0) }}
         </div>
-        <div class="ranking-info">
-          <div class="ranking-name">{{ i + 1 }}. {{ r.nome }}</div>
-          <div class="ranking-days">{{ r.dias }} dias</div>
-        </div>
+        <div *ngIf="i === 0" class="medal">🥇</div>
+        <div *ngIf="i === 1" class="medal">🥈</div>
+        <div *ngIf="i === 2" class="medal">🥉</div>
+      </div>
+      <div class="ranking-info">
+        <div class="ranking-name">{{ i + 1 }}. {{ r.nome }}</div>
+        <div class="ranking-days">{{ r.dias }} dias</div>
       </div>
     </div>
-  </nz-card>
-</div>
+  </div>
+</nz-card> -->

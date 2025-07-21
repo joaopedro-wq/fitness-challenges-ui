@@ -6,4 +6,5 @@ export interface TopBarButton {
   ghost?: boolean;
   action: () => void;
   onClick?: () => void;
+  shape?: 'circle' | 'round' | 'default' ;
 }

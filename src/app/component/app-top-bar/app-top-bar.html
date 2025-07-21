@@ -1,22 +1,25 @@
-<nz-card class="top-bar-container">
-  <div class="left-buttons">
+<div class="flex items-center justify-between w-full flex-wrap gap-2">
+  <!-- Botão Voltar à esquerda -->
+  <div>
     <button nz-button nzType="text" nzShape="round" (click)="goBack()">
       <span class="flex items-center gap-1">
         <span nz-icon nzType="arrow-left"></span>
-        Voltar
+        
       </span>
     </button>
   </div>
 
-  <div class="right-buttons">
+  <!-- Botões à direita -->
+  <div class="flex flex-wrap gap-2 justify-end">
     <button
       *ngFor="let button of buttons"
       nz-button
       [nzType]="button.type"
       [nzDanger]="button.danger"
       [nzGhost]="button.ghost"
-      nzShape="round"
+      
       (click)="button.action()"
+      style="border-radius: 10px;"
     >
       <span class="flex items-center gap-1">
         <span nz-icon [nzType]="button.icon"></span>
@@ -24,4 +27,4 @@
       </span>
     </button>
   </div>
-</nz-card>
+</div>

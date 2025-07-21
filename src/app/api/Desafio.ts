@@ -5,7 +5,7 @@ export interface Desafio {
   dificuldade: 'facil' | 'medio' | 'dificil';
   pontos_recompensa: number;
   duracao_dias: number;
-  url_foto?: string;
+  url_foto: string;
   metodo_pontuacao: 'duracao' | 'distancia' | 'calorias' | 'dias_ativos';
   meta_pontuacao?: number;
   created_at?: string;

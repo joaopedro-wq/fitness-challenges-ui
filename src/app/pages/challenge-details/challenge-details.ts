@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -20,6 +20,7 @@ import { AppTopBar } from '../../component/app-top-bar/app-top-bar';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { TopBarButton } from '../../api/TopBarButton';
 import { ThemeService } from '../../service/theme.service';
+import { ChallengeService } from '../../service/challenge.service';
 
 @Component({
   selector: 'app-challenge-details',
@@ -59,29 +60,39 @@ import { ThemeService } from '../../service/theme.service';
       state('on', style({ opacity: 1, transform: 'scale(1.15)' })),
       transition('off <=> on', animate('200ms ease-in-out')),
     ]),
+    trigger('pageStagger', [
+      transition(':enter', [
+        query('.stagger-item', [
+          style({ opacity: 0, transform: 'translateY(20px)' }),
+          stagger(400, [
+            animate('600ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
+      ])
+    ])
   ],
 })
 export class ChallengeDetails implements OnInit {
-  desafios: Desafio[] = [
+  desafios: Desafio[] = [];
+  topBarButtons: TopBarButton[] = [
     
   ];
-   topBarButtons: TopBarButton[] = [];
   desafioSelecionado?: Desafio;
   diasRegistrados: number[] = [];
   diasFotos: { [dia: number]: string } = {};
-  constructor(private route: ActivatedRoute, public themeService: ThemeService) {}
+  constructor(
+    private route: ActivatedRoute,
+    public themeService: ThemeService,
+    public challengeService: ChallengeService,
+    public router: Router
+  ) {}
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.desafioSelecionado = this.desafios.find((d) => d.id === id);
-
-    // Carregar progresso salvo
-    const saved = localStorage.getItem(`desafio_${id}_dias`);
-    if (saved) {
-      this.diasRegistrados = JSON.parse(saved);
-    }
+    this.challengeService.indexId(id).subscribe((desafio) => {
+      this.desafioSelecionado = desafio;
+    });
   }
-
 
   get duracaoArray(): number[] {
     return this.desafioSelecionado
@@ -91,13 +102,16 @@ export class ChallengeDetails implements OnInit {
 
   get progresso(): number {
     return this.desafioSelecionado
-      ? Math.round((Object.keys(this.diasFotos).length / this.desafioSelecionado.duracao_dias) * 100)
+      ? Math.round(
+          (Object.keys(this.diasFotos).length /
+            this.desafioSelecionado.duracao_dias) *
+            100
+        )
       : 0;
   }
 
   formatProgresso = (percent: number) => `${percent.toFixed(0)}%`;
 
-  
   ranking = [
     { nome: 'João', dias: 7, pontos: 100 },
     { nome: 'Ana', dias: 6, pontos: 90 },
@@ -118,7 +132,10 @@ export class ChallengeDetails implements OnInit {
       const reader = new FileReader();
       reader.onload = () => {
         this.diasFotos[dia] = reader.result as string;
-        localStorage.setItem(`desafio_${this.desafioSelecionado?.id}_diasFotos`, JSON.stringify(this.diasFotos));
+        localStorage.setItem(
+          `desafio_${this.desafioSelecionado?.id}_diasFotos`,
+          JSON.stringify(this.diasFotos)
+        );
       };
       reader.readAsDataURL(file);
     };
@@ -131,5 +148,12 @@ export class ChallengeDetails implements OnInit {
 
   isDark(): boolean {
     return this.themeService.currentTheme === 'dark';
+  }
+  abrirDetalhe(id: number) {
+    this.router.navigate(['/challenge-details', id]);
+  }
+
+  save() {
+   
   }
 }

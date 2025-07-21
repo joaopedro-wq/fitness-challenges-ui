@@ -74,10 +74,11 @@ export class Challenge implements OnInit, OnDestroy {
 
   topBarButtons: TopBarButton[] = [
     {
-      label: 'Adicionar Desafio',
+      label: 'Novo',
       icon: 'plus',
-      type: 'primary',
-      danger: true,
+      type: 'default',
+      ghost: true,
+      
       action: () => this.router.navigate(['/challenge-create']),
     },
   ];
