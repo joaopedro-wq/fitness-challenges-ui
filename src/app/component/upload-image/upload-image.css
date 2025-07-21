@@ -1,0 +1,103 @@
+.upload-card {
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 40px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.3s;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: 400% 400%;
+  animation: gradientAnimation 15s ease infinite;
+  aspect-ratio: 1 / 1;
+  max-width: 400px;
+}
+
+.upload-card-light {
+  background: linear-gradient(135deg, #fdfbfb, rgb(116, 114, 113) f);
+
+  border-color: rgba(209, 213, 219, 0.5); /* gray-300 with transparency */
+}
+
+.upload-card-dark {
+  background: linear-gradient(135deg, #334155, #475569);
+  border-color: rgba(71, 85, 105, 0.5); /* gray-600 with transparency */
+}
+
+.upload-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.upload-card-dragover {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+.upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upload-icon {
+  font-size: 40px;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 12px;
+}
+
+.upload-text {
+  font-size: 15px;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+}
+
+.upload-card-dark .upload-icon,
+.upload-card-dark .upload-text {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.preview-container {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 280px;
+  border-radius: 12px;
+  object-fit: contain;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.remove-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  padding: 6px;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.2s;
+}
+
+.remove-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

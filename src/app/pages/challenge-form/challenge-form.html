@@ -1,0 +1,82 @@
+<div class="flex justify-center">
+
+</div>
+<app-top-bar [buttons]="topBarButtons" [@scaleInOut]></app-top-bar>
+
+<nz-card nzTitle="Cadastrar Challenge" class="challenge-card" [@scaleInOut]>
+  <form [formGroup]="form" class="w-full">
+    <nz-row [nzGutter]="16" nzJustify="space-between" [@listAnimation]>
+      <nz-col
+        *ngFor="let field of formFields"
+        [nzXs]="24"
+        [nzSm]="24"
+        [nzMd]="12"
+        [nzLg]="12"
+      >
+        <nz-form-item class="form-item-vertical">
+          <nz-form-label
+            class="ant-form-item-label"
+            [nzFor]="field.id"
+            [nzRequired]="
+              form.controls[field.formControlName].hasValidator(
+                Validators.required
+              )
+            "
+          >
+            {{ field.label }}
+          </nz-form-label>
+
+          <nz-form-control
+            [nzValidateStatus]="form.controls[field.formControlName]"
+            [nzErrorTip]="errorTemplate"
+          >
+            <ng-container [ngSwitch]="field.type">
+              <input
+                *ngSwitchCase="'input'"
+                nz-input
+                [id]="field.id"
+                [type]="field.inputType || 'text'"
+                [placeholder]="field.placeholder"
+                [formControlName]="field.formControlName"
+              />
+
+              <nz-select
+                *ngSwitchCase="'select'"
+                [id]="field.id"
+                [formControlName]="field.formControlName"
+                [nzPlaceHolder]="field.placeholder"
+              >
+                <nz-option
+                  *ngFor="let option of field.options"
+                  [nzValue]="option.value"
+                  [nzLabel]="option.label"
+                ></nz-option>
+              </nz-select>
+            </ng-container>
+          </nz-form-control>
+        </nz-form-item>
+      </nz-col>
+    </nz-row>
+
+    <div class="app-upload-image-wrapper mt-4 flex justify-center">
+      <app-upload-image
+        (fileSelected)="onFileSelected($event)"
+      ></app-upload-image>
+    </div>
+  </form>
+
+  <ng-template #errorTemplate let-control>
+    <div
+      *ngIf="control.invalid && (control.dirty || control.touched)"
+      @fadeInOut
+      class="error-message"
+    >
+      <ng-container *ngIf="control.hasError('required')">
+        Este campo é obrigatório.
+      </ng-container>
+      <ng-container *ngIf="control.hasError('min')">
+        O valor mínimo é {{ control.getError("min").min }}.
+      </ng-container>
+    </div>
+  </ng-template>
+</nz-card>

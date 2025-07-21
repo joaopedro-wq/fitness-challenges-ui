@@ -1,53 +1,59 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NzCardModule } from 'ng-zorro-antd/card';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { Router } from '@angular/router';
+import { ChallengeService } from '../../service/challenge.service';
+import { Desafio } from '../../api/Desafio';
+import { TopBarButton } from '../../api/TopBarButton';
+import { AppTopBar } from '../../component/app-top-bar/app-top-bar';
 import {
   trigger,
   style,
   animate,
   transition,
+  state,
   query,
   stagger,
-  keyframes,
 } from '@angular/animations';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { Desafio } from '../../api/Desafio';
-import { Router } from '@angular/router';
-import { ChallengeService } from '../../service/challenge.service';
-import { TopBarButton } from '../../api/TopBarButton';
-import { AppTopBar } from '../../component/app-top-bar/app-top-bar';
+import { Subscription } from 'rxjs';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { ThemeService } from '../../service/theme.service';
 
 @Component({
   selector: 'app-challenge',
   standalone: true,
-  imports: [
-    CommonModule,
-    NzCardModule,
-    NzButtonModule,
-    NzTagModule,
-    NzTypographyModule,
-    NzIconModule,
-    AppTopBar
-  ],
+  imports: [CommonModule, NzIconModule, AppTopBar, NzCardModule],
   templateUrl: './challenge.html',
-  styleUrl: './challenge.css',
+  styleUrls: ['./challenge.css'],
   animations: [
-    trigger('staggerFadeScale', [
-      transition('* => *', [
+    trigger('fadeSlideIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-20px)' }),
+        animate(
+          '500ms ease-out',
+          style({ opacity: 1, transform: 'translateY(0)' })
+        ),
+      ]),
+    ]),
+    trigger('fadeSlideInDelayed', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-20px)' }),
+        animate(
+          '500ms 300ms ease-out',
+          style({ opacity: 1, transform: 'translateY(0)' })
+        ), // 300ms delay
+      ]),
+    ]),
+    trigger('staggerCards', [
+      transition(':enter', [
         query(
           ':enter',
           [
-            style({ opacity: 0, transform: 'scale(0.95) translateY(10px)' }),
-            stagger(300, [
+            style({ opacity: 0, transform: 'translateY(10px)' }),
+            stagger(100, [
               animate(
-                '600ms cubic-bezier(0.25, 0.8, 0.25, 1)',
-                style({
-                  opacity: 1,
-                  transform: 'scale(1) translateY(0)',
-                })
+                '400ms ease-out',
+                style({ opacity: 1, transform: 'translateY(0)' })
               ),
             ]),
           ],
@@ -55,11 +61,21 @@ import { AppTopBar } from '../../component/app-top-bar/app-top-bar';
         ),
       ]),
     ]),
+    trigger('fadeSlideScaleItem', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px) scale(0.95)' }),
+        animate(
+          '800ms ease-out',
+          style({ opacity: 1, transform: 'translateY(0) scale(1)' })
+        ),
+      ]),
+    ]),
   ],
 })
-export class Challenge implements OnInit {
-  constructor(public router: Router, public challengeService: ChallengeService) {}
+export class Challenge implements OnInit, OnDestroy {
   desafios: Desafio[] = [];
+  private desafiosSubscription?: Subscription;
+
   topBarButtons: TopBarButton[] = [
     {
       label: 'Adicionar Desafio',
@@ -67,28 +83,35 @@ export class Challenge implements OnInit {
       type: 'primary',
       danger: true,
       action: () => this.router.navigate(['/challenge-create']),
-    }
-  ]
+    },
+  ];
+
+  constructor(
+    public router: Router,
+    public challengeService: ChallengeService,
+    public themeService: ThemeService
+  ) {}
+
   ngOnInit() {
-     this.challengeService.indexAll().subscribe((response) => {
-     this.desafios = response.data; 
-   
-  });
+    this.desafiosSubscription = this.challengeService.indexAll().subscribe({
+      next: (response) => {
+        this.desafios = [...response.data];
+      },
+      error: (error) => {
+        console.error('Erro ao carregar desafios:', error);
+      },
+    });
   }
-  getDificuldadeIcon(dificuldade: string): string {
-    switch (dificuldade) {
-      case 'facil':
-        return 'smile';
-      case 'medio':
-        return 'meh';
-      case 'dificil':
-        return 'frown';
-      default:
-        return 'question';
-    }
+
+  ngOnDestroy() {
+    this.desafiosSubscription?.unsubscribe();
   }
 
   abrirDetalhe(id: number) {
     this.router.navigate(['/challenge-details', id]);
+  }
+
+  isDark(): boolean {
+    return this.themeService.currentTheme === 'dark';
   }
 }

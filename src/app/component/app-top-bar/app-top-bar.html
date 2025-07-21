@@ -1,24 +1,27 @@
 <nz-card class="top-bar-container">
   <div class="left-buttons">
     <button nz-button nzType="text" nzShape="round" (click)="goBack()">
-      <span nz-icon nzType="arrow-left"></span>
-      Voltar
+      <span class="flex items-center gap-1">
+        <span nz-icon nzType="arrow-left"></span>
+        Voltar
+      </span>
     </button>
   </div>
 
- <div class="right-buttons">
-  <button
-    *ngFor="let button of buttons"
-    nz-button
-    [nzType]="button.type"
-    [nzDanger]="button.danger"
-    [nzGhost]="button.ghost"
-    nzShape="round"
-    (click)="button.action()"
-  >
-    <span nz-icon [nzType]="button.icon"></span>
-    {{ button.label }}
-  </button>
-</div>
-
+  <div class="right-buttons">
+    <button
+      *ngFor="let button of buttons"
+      nz-button
+      [nzType]="button.type"
+      [nzDanger]="button.danger"
+      [nzGhost]="button.ghost"
+      nzShape="round"
+      (click)="button.action()"
+    >
+      <span class="flex items-center gap-1">
+        <span nz-icon [nzType]="button.icon"></span>
+        {{ button.label }}
+      </span>
+    </button>
+  </div>
 </nz-card>

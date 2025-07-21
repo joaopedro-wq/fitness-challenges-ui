@@ -1,0 +1,37 @@
+<div
+  class="upload-card"
+  [ngClass]="{
+    'upload-card-dark': isDark(),
+    'upload-card-light': !isDark(),
+    'upload-card-dragover': isDragging
+  }"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave()"
+  (drop)="onDrop($event)"
+  (click)="fileInput.click()"
+>
+  <input
+    type="file"
+    accept="image/*,video/*"
+    hidden
+    #fileInput
+    (change)="onFileSelected($event)"
+  />
+
+  <ng-container *ngIf="!previewUrl; else previewBlock">
+    <div class="upload-content">
+      <i nz-icon nzType="cloud-upload" nzTheme="outline" class="upload-icon"></i>
+      <p class="upload-text">Clique ou arraste uma mídia para enviar</p>
+    </div>
+  </ng-container>
+
+  <ng-template #previewBlock>
+    <div class="preview-container">
+      <img *ngIf="isImage()" [src]="previewUrl" alt="Preview" class="preview-image" />
+      <video *ngIf="isVideo()" [src]="previewUrl" controls class="preview-image"></video>
+      <button type="button" class="remove-btn" (click)="removeFile($event)">
+        <i nz-icon nzType="close" nzTheme="outline"></i>
+      </button>
+    </div>
+  </ng-template>
+</div>

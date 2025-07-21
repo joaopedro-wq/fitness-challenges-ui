@@ -1,42 +1,250 @@
- <app-top-bar [buttons]="topBarButtons"></app-top-bar>
-<div [@staggerFadeScale] class="challenge-grid">
-  <div
-    *ngFor="let d of desafios"
-    class="challenge-card"
-    [ngClass]="d.dificuldade"
-  >
-    <!-- Header -->
-    <div class="challenge-header">
-      <h3>{{ d.titulo }}</h3>
-      <span class="dificuldade-badge" [ngClass]="d.dificuldade">
-        {{ d.dificuldade | uppercase }}
-      </span>
-    </div>
+<ng-container
+  class="flex flex-col h-full overflow-hidden mx-auto px-4 max-w-7xl"
+>
+  <!-- Top Bar -->
+  <app-top-bar [buttons]="topBarButtons"></app-top-bar>
 
-    <!-- Descrição -->
-    <p class="descricao">{{ d.descricao }}</p>
+  <div class="w-full rounded-2xl overflow-hidden mt-4">
+    <nz-card nzBordered>
+      <!-- Título -->
+      <div
+        [@fadeSlideIn]
+        class="flex items-center justify-center mb-2 md:mb-3 gap-3"
+      >
+        <div
+          [ngClass]="{
+            'bg-red-500': !isDark(),
+            'bg-red-400': isDark()
+          }"
+          class="rounded-full p-3 flex items-center justify-center"
+        >
+          <i
+            nz-icon
+            nzType="fire"
+            nzTheme="fill"
+            [style.color]="isDark() ? '#1F2937' : '#FFFFFF'"
+            class="text-2xl"
+          ></i>
+        </div>
+        <h1
+          [ngClass]="{
+            'text-gray-900': !isDark(),
+            'text-gray-100': isDark()
+          }"
+          class="text-2xl md:text-3xl font-semibold leading-tight"
+        >
+          Challagems Disponíveis
+        </h1>
+      </div>
 
-    <!-- Info -->
-    <div class="info">
-      <span class="info-item">
-        <i nz-icon nzType="trophy" class="info-icon"></i>
-        {{ d.pontos_recompensa }} pts
-      </span>
-      <span class="info-item">
-        <i nz-icon nzType="calendar" class="info-icon"></i>
-        {{ d.duracao_dias }} dias
-      </span>
-    </div>
+      <!-- Subtítulo -->
+      <p
+        [@fadeSlideInDelayed]
+        [ngClass]="{
+          'text-gray-600': !isDark(),
+          'text-gray-300': isDark()
+        }"
+        class="text-center text-sm md:text-base mt-1 md:mt-2 mb-6 md:mb-10 max-w-xl mx-auto px-2"
+      >
+        Escolha uma challagem para testar suas habilidades e ganhar pontos!
+      </p>
 
-    <!-- CTA -->
-    <button class="cta" (click)="abrirDetalhe(d.id)">
-      <i
-        nz-icon
-        nzType="rocket"
-        class="cta-icon"
-        
-      ></i>
-      Quero participar
-    </button>
+      <!-- Grid de Cards -->
+      <div
+        class="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+      >
+        <div
+          *ngFor="let c of desafios; let i = index"
+          [@fadeSlideScaleItem]
+          [style.animationDelay]="i * 100 + 'ms'"
+          class="rounded-xl shadow-md overflow-hidden flex flex-col transition-transform duration-300 ease-in-out hover:scale-[1.02]"
+          [ngClass]="{
+            'text-gray-800': !isDark(),
+            'text-gray-100': isDark(),
+
+            'border-l-4 border-green-700':
+              c.dificuldade === 'facil' && !isDark(),
+            'border-l-4 border-green-400':
+              c.dificuldade === 'facil' && isDark(),
+
+            'border-l-4 border-yellow-600':
+              c.dificuldade === 'medio' && !isDark(),
+            'border-l-4 border-yellow-300':
+              c.dificuldade === 'medio' && isDark(),
+
+            'border-l-4 border-red-700':
+              c.dificuldade === 'dificil' && !isDark(),
+            'border-l-4 border-red-400': c.dificuldade === 'dificil' && isDark()
+          }"
+          [ngStyle]="
+            !isDark()
+              ? {
+                  background: 'linear-gradient(135deg, #f0f4f8, #d9e2ec)'
+                }
+              : {
+                  background: 'linear-gradient(135deg, #121212, #2d2d2d)'
+                }
+          "
+        >
+          <!-- Imagem -->
+          <img
+            *ngIf="c.url_foto"
+            [src]="c.url_foto"
+            alt="{{ c.titulo }}"
+            class="w-full h-48 object-cover"
+          />
+
+          <!-- Conteúdo -->
+          <div class="p-5 flex flex-col flex-grow">
+            <!-- Título e dificuldade -->
+            <div class="flex justify-between items-center mb-2">
+              <h3
+                [ngClass]="{
+                  'text-gray-900': !isDark(),
+                  'text-gray-100': isDark()
+                }"
+                class="text-base font-semibold truncate"
+              >
+                {{ c.titulo }}
+              </h3>
+              <span
+                [ngClass]="{
+                  'bg-green-100 text-green-800':
+                    !isDark() && c.dificuldade === 'facil',
+                  'bg-green-900 text-green-300':
+                    isDark() && c.dificuldade === 'facil',
+
+                  'bg-yellow-100 text-yellow-800':
+                    !isDark() && c.dificuldade === 'medio',
+                  'bg-yellow-900 text-yellow-300':
+                    isDark() && c.dificuldade === 'medio',
+
+                  'bg-red-100 text-red-800':
+                    !isDark() && c.dificuldade === 'dificil',
+                  'bg-red-900 text-red-300':
+                    isDark() && c.dificuldade === 'dificil'
+                }"
+                class="uppercase text-xs font-bold px-2 py-0.5 rounded"
+              >
+                {{ c.dificuldade }}
+              </span>
+            </div>
+
+            <!-- Descrição -->
+            <p
+              [ngClass]="{
+                'text-gray-700': !isDark(),
+                'text-gray-300': isDark()
+              }"
+              class="text-xs mb-4 flex-grow line-clamp-3"
+            >
+              {{ c.descricao || "Sem descrição disponível." }}
+            </p>
+
+            <!-- Pontos, duração e método -->
+            <div
+              class="flex justify-between text-xs mb-4"
+              [ngClass]="{
+                'text-gray-600': !isDark(),
+                'text-gray-400': isDark()
+              }"
+            >
+              <span class="flex items-center gap-1">
+                <i
+                  nz-icon
+                  nzType="trophy"
+                  nzTheme="fill"
+                  [style.color]="isDark() ? '#FBBF24' : '#F59E0B'"
+                ></i>
+                {{ c.pontos_recompensa }} pts
+              </span>
+              <span class="flex items-center gap-1">
+                <i
+                  nz-icon
+                  nzType="calendar"
+                  nzTheme="fill"
+                  [style.color]="isDark() ? '#60A5FA' : '#3B82F6'"
+                ></i>
+                {{ c.duracao_dias }} dias
+              </span>
+              <span *ngIf="c.metodo_pontuacao" class="flex items-center gap-1">
+                <ng-container [ngSwitch]="c.metodo_pontuacao">
+                  <i
+                    *ngSwitchCase="'dias_ativos'"
+                    nz-icon
+                    nzType="schedule"
+                    nzTheme="fill"
+                    [style.color]="isDark() ? '#68D391' : '#22C55E'"
+                  ></i>
+                  <i
+                    *ngSwitchCase="'calorias'"
+                    nz-icon
+                    nzType="fire"
+                    nzTheme="fill"
+                    [style.color]="isDark() ? '#F87171' : '#EF4444'"
+                  ></i>
+                  <i
+                    *ngSwitchCase="'distancia'"
+                    nz-icon
+                    nzType="compass"
+                    nzTheme="fill"
+                    [style.color]="isDark() ? '#818CF8' : '#6366F1'"
+                  ></i>
+                  <i
+                    *ngSwitchDefault
+                    nz-icon
+                    nzType="info-circle"
+                    nzTheme="fill"
+                    [style.color]="isDark() ? '#9CA3AF' : '#6B7280'"
+                  ></i>
+                </ng-container>
+                <span class="capitalize">
+                  {{
+                    c.metodo_pontuacao === "dias_ativos"
+                      ? "Dias"
+                      : c.metodo_pontuacao === "calorias"
+                      ? "Calorias"
+                      : c.metodo_pontuacao === "distancia"
+                      ? "Distância"
+                      : c.metodo_pontuacao.replace("_", " ")
+                  }}
+                </span>
+              </span>
+            </div>
+
+            <!-- Botão -->
+            <button
+              (click)="abrirDetalhe(c.id)"
+              type="button"
+              aria-label="Quero participar"
+              class="self-start font-semibold px-5 py-2 rounded-lg flex items-center transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2"
+              [ngClass]="
+                isDark()
+                  ? 'bg-gradient-to-r from-purple-700 via-indigo-800 to-purple-900 text-gray-200 shadow-lg hover:from-indigo-700 hover:via-purple-800 hover:to-indigo-900 focus:ring-purple-600 focus:ring-offset-gray-900'
+                  : 'bg-gradient-to-r from-purple-500 via-indigo-600 to-purple-700 text-white shadow-md hover:from-indigo-600 hover:via-purple-700 hover:to-indigo-800 focus:ring-indigo-500 focus:ring-offset-white'
+              "
+            >
+              <i
+                nz-icon
+                nzType="rocket"
+                nzTheme="fill"
+                class="inline mr-2"
+                aria-hidden="true"
+                [style.color]="isDark() ? '#E0E7FF' : '#FFFFFF'"
+              ></i>
+              <span
+                class="select-none"
+                [ngClass]="{
+                  'text-white': !isDark(),
+                  'text-gray-200': isDark()
+                }"
+              >
+                Quero participar
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nz-card>
   </div>
-</div>
+</ng-container>

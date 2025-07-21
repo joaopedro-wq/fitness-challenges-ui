@@ -30,6 +30,7 @@
             ],
             "styles": [
               "src/styles.less",
+              "src/styles.css",
                {
                 "input": "src/styles/default.less",
                 "bundleName": "default",
@@ -95,7 +96,8 @@
               }
             ],
             "styles": [
-             "src/styles.less"
+             "src/styles.less",
+             "src/styles.css"
             ]
           }
         }

@@ -1,0 +1,33 @@
+.challenge-card {
+  border-radius: 12px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+  padding: 24px;
+ 
+}
+
+.form-item-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 8px 0;
+  
+}
+
+.form-item-vertical .ant-form-item-label {
+  margin-bottom: 8px;
+  text-align: left !important; /* Alinha à esquerda */
+}
+
+.form-item-vertical .ant-form-item-control {
+  width: 100%;
+}
+
+
+.app-upload-image-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+
