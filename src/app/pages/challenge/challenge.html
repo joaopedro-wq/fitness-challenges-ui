@@ -57,7 +57,7 @@
       >
         <div
           *ngFor="let c of desafios; let i = index"
-          [@staggerCards]="{ value: '', params: { delay: i * 200 + 'ms' } }"
+          [@staggerCards]="{ value: '', params: { delay: i * 150 + 'ms' } }"
           class="rounded-xl shadow-md overflow-hidden flex flex-col transition-transform duration-300 ease-in-out hover:scale-[1.02]"
           [ngClass]="{
             'text-gray-800': !isDark(),

@@ -29,7 +29,7 @@ import { TopBarButton } from './api/TopBarButton';
 })
 export class App {
  constructor(private router: Router, private themeService: ThemeService) {}
-  isCollapsed = false;
+  isCollapsed = true;
  topBarButtons: TopBarButton[] = [
   {
     label: 'Novo',
