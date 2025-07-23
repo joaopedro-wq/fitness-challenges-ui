@@ -6,17 +6,17 @@
       'bg-main-gradient-light': !isDark(),
    
     }"
-    class="w-full rounded-2xl overflow-hidden mt-4"
-    [@pageSlideFade]
+    class="w-full rounded-2xl overflow-hidden mt-4 p-0"
+    
   >
-    <nz-card [@itemCascadeFade]>
+    <nz-card >
+      <app-top-bar
+        [buttons]="topBarButtons"
+        class="mb-6 cascade-item"
+      ></app-top-bar>
       <div
-        class="w-full mx-auto rounded-3xl p-6 sm:p-8 space-y-8 flex flex-col"
+        class="w-full mx-auto rounded-3xl p-0 sm:p-8 space-y-8 flex flex-col "
       >
-        <app-top-bar
-          [buttons]="topBarButtons"
-          class="mb-6 cascade-item"
-        ></app-top-bar>
 
         <!-- Botão Quero Participar -->
         <button

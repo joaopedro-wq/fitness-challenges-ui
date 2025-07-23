@@ -1,9 +1,9 @@
 
 <nz-card nzBordered>
-  <app-top-bar [buttons]="topBarButtons" [@scaleInOut]></app-top-bar>
-  <nz-card nzTitle="Cadastrar Challenge" class="challenge-card" [@scaleInOut]>
+  <app-top-bar [buttons]="topBarButtons"></app-top-bar>
+  <nz-card nzTitle="Cadastrar Challenge" class="challenge-card" >
     <form [formGroup]="form" class="w-full">
-      <nz-row [nzGutter]="16" nzJustify="space-between" [@listAnimation]>
+      <nz-row [nzGutter]="16" nzJustify="space-between" >
         <nz-col
           *ngFor="let field of formFields"
           [nzXs]="24"

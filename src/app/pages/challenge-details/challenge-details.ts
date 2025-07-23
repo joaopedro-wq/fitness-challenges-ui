@@ -49,7 +49,7 @@ import { Subscription } from 'rxjs';
     transition(':enter', [
       style({ opacity: 0, transform: 'translateY(40px)' }),
       animate(
-        '500ms ease-out',
+        '1000ms ease-out',
         style({ opacity: 1, transform: 'translateY(0)' })
       ),
     ]),
@@ -61,23 +61,7 @@ import { Subscription } from 'rxjs';
     ]),
   ]),
 
-  trigger('itemCascadeFade', [
-    transition(':enter', [
-      query(
-        '.cascade-item',
-        [
-          style({ opacity: 0, transform: 'translateY(15px)' }),
-          stagger(100, [
-            animate(
-              '400ms ease-out',
-              style({ opacity: 1, transform: 'translateY(0)' })
-            ),
-          ]),
-        ],
-        { optional: true }
-      ),
-    ]),
-  ]),
+
 
   trigger('diaToggle', [
     state('off', style({ opacity: 0.6, transform: 'scale(1)' })),

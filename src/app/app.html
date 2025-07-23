@@ -41,17 +41,19 @@
     </nz-header>
 
     <nz-content class="app-content">
-    <!--  <app-top-bar [buttons]="topBarButtons"></app-top-bar>  -->
+      <!--  <app-top-bar [buttons]="topBarButtons"></app-top-bar>  -->
 
-      <div class="inner-content">
-        <router-outlet></router-outlet>
-      </div>
+    <main [@routeAnimations]="prepareRoute(outlet)" style="position: relative;">
+  <router-outlet #outlet="outlet"></router-outlet>
+</main>
+
     </nz-content>
 
- <nz-footer class="app-footer" [ngClass]="{ 'footer-dark': isDark(), 'footer-light': !isDark() }">
-  Fitness Challenges ©2025 • Desenvolvido por João Pedro Bandeira
-</nz-footer>
-
-
+    <!--  <nz-footer
+      class="app-footer"
+      [ngClass]="{ 'footer-dark': isDark(), 'footer-light': !isDark() }"
+    >
+      Fitness Challenges ©2025 • Desenvolvido por João Pedro Bandeira
+    </nz-footer> -->
   </nz-layout>
 </nz-layout>

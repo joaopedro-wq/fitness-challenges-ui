@@ -11,6 +11,19 @@ import { MenuItem } from './api/MenuItem';
 import { ThemeService } from './service/theme.service';
 import { TopBarButton } from './api/TopBarButton';
 
+import {
+  trigger,
+  transition,
+  style,
+  animate,
+  query,
+  group,
+  stagger,
+} from '@angular/animations';
+import { slideVertical } from './animations/slideVertical';
+import { smoothSlide } from './animations/smoothSlide';
+import { slideHorizontal } from './animations/slideHorizontal';
+import { fadeAnimation } from './animations/fadeAnimation';
 @Component({
   selector: 'app-root',
   imports: [
@@ -21,29 +34,32 @@ import { TopBarButton } from './api/TopBarButton';
     NzButtonModule,
     RouterOutlet,
     Theme,
-
-    
   ],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
+  animations: [slideHorizontal  /* ou slideHorizontal, zoomFade */],
 })
 export class App {
- constructor(private router: Router, private themeService: ThemeService) {}
+  constructor(private router: Router, private themeService: ThemeService) {}
+  prepareRoute(outlet: RouterOutlet) {
+    return outlet.activatedRouteData?.['animation'];
+  }
+
   isCollapsed = true;
- topBarButtons: TopBarButton[] = [
-  {
-    label: 'Novo',
-    icon: 'plus',
-    type: 'primary',
-    action: () => this.createNew(),
-  },
-  {
-    label: 'Atualizar',
-    icon: 'reload',
-    type: 'default',
-    action: () => this.refresh(),
-  },
-];
+  topBarButtons: TopBarButton[] = [
+    {
+      label: 'Novo',
+      icon: 'plus',
+      type: 'primary',
+      action: () => this.createNew(),
+    },
+    {
+      label: 'Atualizar',
+      icon: 'reload',
+      type: 'default',
+      action: () => this.refresh(),
+    },
+  ];
 
   createNew() {
     console.log('Criar novo item...');
